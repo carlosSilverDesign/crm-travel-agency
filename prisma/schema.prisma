@@ -1,0 +1,379 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  AGENT
+  MANAGER
+}
+
+enum TravelerType {
+  CORPORATE
+  FAMILY
+  HONEYMOON
+  BACKPACKER
+  SENIOR
+  SOLO
+}
+
+enum OpportunityStage {
+  PROSPECT
+  QUOTED
+  NEGOTIATION
+  BOOKED
+  TRAVELING
+  POST_SALE
+  LOST
+  WON
+}
+
+enum OpportunitySource {
+  REFERRAL
+  SOCIAL
+  WEB
+  WALK_IN
+  RETURNING
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  VIEWED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum QuoteItemType {
+  FLIGHT
+  HOTEL
+  TRANSFER
+  ACTIVITY
+  INSURANCE
+  MISC
+}
+
+enum BookingStatus {
+  CONFIRMED
+  PAYING
+  PAID
+  OPERATING
+  COMPLETED
+  CANCELLED
+}
+
+enum ProviderType {
+  AIRLINE
+  HOTEL
+  WHOLESALER
+  ACTIVITY
+  TRANSFER
+  INSURANCE
+}
+
+enum ProviderPaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum InteractionChannel {
+  EMAIL
+  PHONE
+  WHATSAPP
+  INSTAGRAM
+  FACEBOOK
+  IN_PERSON
+  NOTE
+}
+
+enum InteractionDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum IncidentStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  ESCALATED
+}
+
+enum IncidentPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum CampaignType {
+  BIRTHDAY
+  REACTIVATION
+  SEASONAL
+  NPS
+  CHECKIN_REMINDER
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(AGENT)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  // Relations
+  clients         Client[]        @relation("AgentClients")
+  opportunities   Opportunity[]   @relation("AgentOpportunities")
+  quotes          Quote[]         @relation("AgentQuotes")
+  travelHistories TravelerHistory[] @relation("AgentTravelHistories")
+  incidents       Incident[]      @relation("AgentIncidents")
+}
+
+model Client {
+  id              String       @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String       @unique
+  phone           String?
+  birthDate       DateTime?
+  nationality     String?
+  passportNumber  String?
+  passportExpiry  DateTime?
+  documentFiles   Json?        // JSON: Array of { tipo, url, expiryDate }
+  preferences     Json?        // JSON: { seatType, mealType, hotelChains[], allergies[] }
+  travelerType    TravelerType @default(SOLO)
+  loyaltyPoints   Int          @default(0)
+  npsScore        Int?
+  totalSpent      Float        @default(0.0)
+  assignedAgentId String?
+  assignedAgent   User?        @relation("AgentClients", fields: [assignedAgentId], references: [id])
+  tags            String[]     @default([])
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  // Relations
+  travelHistory TravelerHistory[]
+  opportunities Opportunity[]
+  quotes        Quote[]
+  bookings      Booking[]
+  passengers    Passenger[]
+  interactions  Interaction[]
+}
+
+model TravelerHistory {
+  id            String   @id @default(uuid())
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  destination   String
+  departureDate DateTime
+  returnDate    DateTime
+  totalPaid     Float
+  currency      String   @default("USD")
+  bookingId     String?
+  agentId       String?
+  agent         User?    @relation("AgentTravelHistories", fields: [agentId], references: [id])
+}
+
+model Opportunity {
+  id             String            @id @default(uuid())
+  clientId       String
+  client         Client            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  agentId        String
+  agent          User              @relation("AgentOpportunities", fields: [agentId], references: [id])
+  title          String
+  stage          OpportunityStage  @default(PROSPECT)
+  estimatedValue Float
+  currency       String            @default("USD")
+  probability    Int               @default(10) // percentage
+  closeDate      DateTime?
+  source         OpportunitySource @default(WEB)
+  notes          String?
+  lostReason     String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  // Relations
+  quotes       Quote[]
+  bookings     Booking[]
+  interactions Interaction[]
+}
+
+model Quote {
+  id            String      @id @default(uuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  clientId      String
+  client        Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  agentId       String
+  agent         User        @relation("AgentQuotes", fields: [agentId], references: [id])
+  status        QuoteStatus @default(DRAFT)
+  validUntil    DateTime
+  totalAmount   Float
+  currency      String      @default("USD")
+  itinerary     Json?       // JSON: days, description, photos, hotels, activities
+  pdfUrl        String?
+  sentAt        DateTime?
+  viewedAt      DateTime?
+  version       Int         @default(1)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  items    QuoteItem[]
+  bookings Booking[]
+}
+
+model QuoteItem {
+  id          String        @id @default(uuid())
+  quoteId     String
+  quote       Quote         @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  type        QuoteItemType
+  description String
+  quantity    Int           @default(1)
+  unitPrice   Float
+  currency    String        @default("USD")
+  providerId  String?
+  provider    Provider?     @relation(fields: [providerId], references: [id])
+  providerRef String?
+}
+
+model Booking {
+  id               String        @id @default(uuid())
+  quoteId          String?
+  quote            Quote?        @relation(fields: [quoteId], references: [id])
+  opportunityId    String?
+  opportunity      Opportunity?  @relation(fields: [opportunityId], references: [id])
+  clientId         String
+  client           Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  status           BookingStatus @default(CONFIRMED)
+  totalAmount      Float
+  currency         String        @default("USD")
+  depositAmount    Float         @default(0.0)
+  depositDueDate   DateTime?
+  balanceDueDate   DateTime?
+  confirmationCode String?
+  travelDates      Json?         // JSON: { departureDate, returnDate }
+  documents        String[]      @default([]) // Vouchers, itineraries (URLs)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // Relations
+  passengers       Passenger[]
+  incidents        Incident[]
+  providerPayments ProviderPayment[]
+}
+
+model Passenger {
+  id             String    @id @default(uuid())
+  bookingId      String
+  booking        Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  clientId       String?
+  client         Client?   @relation(fields: [clientId], references: [id])
+  firstName      String
+  lastName       String
+  passportNumber String?
+  passportExpiry DateTime?
+  birthDate      DateTime?
+  nationality    String?
+  seatPreference String?
+  mealPreference String?
+}
+
+model Provider {
+  id               String       @id @default(uuid())
+  name             String
+  type             ProviderType
+  contactEmail     String?
+  contactPhone     String?
+  paymentTermsDays Int          @default(30)
+  commissionRate   Float        @default(0.0)
+  currency         String       @default("USD")
+  apiEndpoint      String?
+  isActive         Boolean      @default(true)
+  notes            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  // Relations
+  quoteItems       QuoteItem[]
+  providerPayments ProviderPayment[]
+}
+
+model ProviderPayment {
+  id         String                @id @default(uuid())
+  bookingId  String
+  booking    Booking               @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider              @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  amount     Float
+  currency   String                @default("USD")
+  dueDate    DateTime
+  paidAt     DateTime?
+  status     ProviderPaymentStatus @default(PENDING)
+  invoiceUrl String?
+  reference  String?
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
+}
+
+model Interaction {
+  id            String               @id @default(uuid())
+  clientId      String
+  client        Client               @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  opportunityId String?
+  opportunity   Opportunity?         @relation(fields: [opportunityId], references: [id])
+  channel       InteractionChannel
+  direction     InteractionDirection
+  subject       String
+  content       String
+  attachments   String[]             @default([])
+  agentId       String
+  occurredAt    DateTime             @default(now())
+  isAutomatic   Boolean              @default(false)
+}
+
+model Incident {
+  id          String           @id @default(uuid())
+  bookingId   String
+  booking     Booking          @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  type        String
+  description String
+  status      IncidentStatus   @default(OPEN)
+  priority    IncidentPriority @default(MEDIUM)
+  resolvedAt  DateTime?
+  resolution  String?
+  agentId     String?
+  agent       User?            @relation("AgentIncidents", fields: [agentId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Campaign {
+  id            String         @id @default(uuid())
+  name          String
+  type          CampaignType
+  status        CampaignStatus @default(DRAFT)
+  targetSegment Json?          // JSON criteria for segment
+  templateId    String?
+  scheduledAt   DateTime?
+  sentCount     Int            @default(0)
+  openRate      Float          @default(0.0)
+  clickRate     Float          @default(0.0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
