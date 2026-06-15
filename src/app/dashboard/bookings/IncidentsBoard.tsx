@@ -115,7 +115,7 @@ export default function IncidentsBoard({ initialIncidents, bookings }: Incidents
       {!showReportForm ? (
         <button
           onClick={() => setShowReportForm(true)}
-          className="w-full bg-slate-950/60 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white py-2 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+          className="w-full bg-slate-950/60 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-slate-100 py-2 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition"
         >
           <Plus className="h-4 w-4" />
           <span>Reportar Incidencia en Destino</span>
@@ -239,7 +239,7 @@ export default function IncidentsBoard({ initialIncidents, bookings }: Incidents
                 {!isResolving ? (
                   <button
                     onClick={() => setResolvingId(inc.id)}
-                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-1.5 px-3 rounded-xl text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-slate-100 border border-slate-700 py-1.5 px-3 rounded-xl text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer"
                   >
                     <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
                     <span>Marcar Resuelta</span>

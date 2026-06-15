@@ -5,6 +5,7 @@ import {
   updateClient as dbUpdateClient,
   deleteClient as dbDeleteClient,
 } from '@/modules/clients/mutations'
+import { getClientById } from '@/modules/clients/queries'
 import { clientSchema, ClientSchemaType } from '@/lib/validations/clients.schema'
 import { revalidatePath } from 'next/cache'
 
@@ -57,3 +58,14 @@ export async function deleteClientAction(id: string) {
   }
   return result
 }
+
+/**
+ * Server Action para obtener la Ficha Única del Pasajero con todo su historial
+ */
+export async function getClientDetailAction(id: string) {
+  if (!id) {
+    return { success: false, error: 'ID de cliente requerido.' }
+  }
+  return await getClientById(id)
+}
+

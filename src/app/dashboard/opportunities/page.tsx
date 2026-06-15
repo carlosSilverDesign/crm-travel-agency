@@ -142,7 +142,7 @@ export default async function OpportunitiesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Tratos Activos</p>
-            <p className="text-xl font-bold text-white mt-0.5">{activeOpportunities}</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">{activeOpportunities}</p>
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export default async function OpportunitiesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Valor de Pipeline</p>
-            <p className="text-xl font-bold text-white mt-0.5">${totalValue.toLocaleString()}</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">${totalValue.toLocaleString()}</p>
           </div>
         </div>
 
@@ -162,7 +162,7 @@ export default async function OpportunitiesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Etapas</p>
-            <p className="text-xl font-bold text-white mt-0.5">8 Fases del Flujo</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">8 Fases del Flujo</p>
           </div>
         </div>
       </div>

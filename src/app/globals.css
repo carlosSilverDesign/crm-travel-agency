@@ -1,26 +1,156 @@
 @import "tailwindcss";
 
-:root {
+@theme {
+  /* Light Mode (Default) - Invert Slate Scale */
+  --color-slate-5: #0f172a;
+  --color-slate-50: #0f172a;
+  --color-slate-100: #0f172a;
+  --color-slate-200: #1e293b;
+  --color-slate-300: #334155;
+  --color-slate-400: #475569;
+  --color-slate-500: #64748b;
+  --color-slate-600: #94a3b8;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-850: #f1f5f9;
+  --color-slate-900: #f8fafc;
+  --color-slate-950: #ffffff;
+
+  /* Invert blue/indigo shades slightly for better light-mode contrast */
+  --color-blue-400: #2563eb;
+  --color-blue-500: #1d4ed8;
+  --color-blue-600: #1e40af;
+  --color-indigo-400: #4f46e5;
+  --color-indigo-600: #3730a3;
+
+  /* Darker Warning/Danger colors for Light Mode contrast */
+  --color-amber-400: #b45309; /* amber-700 */
+  --color-amber-550: #92400e; /* amber-800 */
+  --color-red-400: #b91c1c;   /* red-700 */
+  --color-red-500: #991b1b;   /* red-800 */
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+.dark {
+  /* Dark Mode - Restore Standard Slate Scale */
+  --color-slate-5: #f8fafc;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-850: #182235;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Standard Blue/Indigo */
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-indigo-400: #818cf8;
+  --color-indigo-600: #4f46e5;
+
+  /* Standard Neon Warning/Danger colors */
+  --color-amber-400: #fbbf24;
+  --color-amber-550: #d97706;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+
+  --background: #020617;
+  --foreground: #f8fafc;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.2s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.15s ease-out forwards;
+}
+
+/* Light mode contrast fixes for inputs, selects, textareas, and secondary/cancel buttons */
+input, select, textarea,
+button.bg-slate-800,
+a.bg-slate-800,
+button.bg-slate-900,
+a.bg-slate-900 {
+  color: var(--color-slate-100) !important;
+}
+
+/* Light mode table row hover contrast correction */
+.hover\:bg-slate-800\/20:hover {
+  background-color: var(--color-slate-850) !important;
+}
+
+/* Custom styled select elements */
+select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 0.85rem !important;
+  padding-right: 2.75rem !important;
+}
+
+.dark select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+}
+
+/* Global cursor pointer for interactive elements */
+button,
+a,
+select,
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer !important;
+}
+
+button:disabled,
+a:disabled,
+select:disabled,
+input:disabled {
+  cursor: not-allowed !important;
+}
+
+/* Custom button hover styling for dashboard page */
+.btn-registrar-trato:hover {
+  background-color: #f1f5f9 !important;
+  color: #312e81 !important; /* text-indigo-900 */
+}
+
+

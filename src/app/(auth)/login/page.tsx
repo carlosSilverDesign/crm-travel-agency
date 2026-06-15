@@ -44,8 +44,8 @@ export default function LoginPage() {
           <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
             <Plane className="h-6 w-6 text-white rotate-45" />
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white mt-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
-            Antigravity Travel
+          <h1 className="text-3xl font-extrabold tracking-tight mt-4 text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-white dark:via-slate-100 dark:to-slate-400">
+            Continents Travel CRM
           </h1>
           <p className="text-sm text-slate-400">
             CRM inteligente para asesores de viajes B2C

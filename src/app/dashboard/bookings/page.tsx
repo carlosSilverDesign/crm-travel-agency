@@ -199,7 +199,7 @@ export default async function BookingsPage() {
       {/* 1. Supplier Payments (Liquidaciones Traffic Light UI) */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/40 flex justify-between items-center">
-          <h3 className="font-bold text-base text-white flex items-center gap-2">
+          <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-emerald-400" />
             <span>Control de Liquidaciones a Proveedores</span>
           </h3>
@@ -273,7 +273,7 @@ export default async function BookingsPage() {
         {/* Incidents Board (Left 5 cols in Desktop) */}
         <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div className="border-b border-slate-800 pb-3 flex justify-between items-center">
-            <h3 className="font-bold text-base text-white flex items-center gap-2">
+            <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
               <AlertOctagon className="h-5 w-5 text-rose-500" />
               <span>Incidencias en Destino</span>
             </h3>
@@ -288,7 +288,7 @@ export default async function BookingsPage() {
         {/* Confirmed Passenger Manifests (Right 7 cols in Desktop) */}
         <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div className="border-b border-slate-800 pb-3">
-            <h3 className="font-bold text-base text-white flex items-center gap-2">
+            <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
               <Briefcase className="h-5 w-5 text-indigo-400" />
               <span>Manifiesto de Pasajeros y Reservas</span>
             </h3>

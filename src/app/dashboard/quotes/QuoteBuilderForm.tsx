@@ -17,6 +17,15 @@ const CONVERSION_ESTIMATES: Record<string, number> = {
   'MXN': 0.057, // 1 MXN = 0.057 USD
 }
 
+const ITEM_TYPE_LABELS: Record<QuoteItemType, string> = {
+  FLIGHT: 'Vuelo',
+  HOTEL: 'Hotel',
+  TRANSFER: 'Traslado',
+  ACTIVITY: 'Actividad',
+  INSURANCE: 'Seguro',
+  MISC: 'Otros',
+}
+
 interface OpportunityOption {
   id: string
   title: string
@@ -185,7 +194,7 @@ export default function QuoteBuilderForm({
 
       {/* Main card */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
-        <h3 className="font-bold text-base text-white border-b border-slate-800 pb-3 flex items-center gap-2">
+        <h3 className="font-bold text-base text-slate-100 border-b border-slate-800 pb-3 flex items-center gap-2">
           <Compass className="h-5 w-5 text-blue-400" />
           <span>Información General de la Propuesta</span>
         </h3>
@@ -196,7 +205,7 @@ export default function QuoteBuilderForm({
             <label className="text-xs font-semibold text-slate-300 block">Trato / Oportunidad *</label>
             <select
               {...register('opportunityId')}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
             >
               {opportunities.map((o) => (
                 <option key={o.id} value={o.id} className="bg-slate-900">
@@ -212,7 +221,7 @@ export default function QuoteBuilderForm({
             <input
               type="date"
               {...register('validUntil')}
-              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
             />
           </div>
 
@@ -221,7 +230,7 @@ export default function QuoteBuilderForm({
             <label className="text-xs font-semibold text-slate-300 block">Moneda de la Cotización *</label>
             <select
               {...register('currency')}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
             >
               <option value="USD">Dólares Americanos (USD)</option>
               <option value="EUR">Euros (EUR)</option>
@@ -234,7 +243,7 @@ export default function QuoteBuilderForm({
       {/* Pricing Items Builder */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
         <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-          <h3 className="font-bold text-base text-white flex items-center gap-2">
+          <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
             <Layers className="h-5 w-5 text-indigo-400" />
             <span>Ítems y Segmentos de Precio</span>
           </h3>
@@ -266,32 +275,32 @@ export default function QuoteBuilderForm({
           {itemFields.map((field, index) => (
             <div
               key={field.id}
-              className="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end relative"
+              className="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-[repeat(13,minmax(0,1fr))] gap-3 items-end relative"
             >
               {/* Type */}
               <div className="sm:col-span-2 space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Tipo</label>
                 <select
                   {...register(`items.${index}.type` as const)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-2 text-xs text-white focus:outline-none"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-2 text-xs text-slate-100 focus:outline-none"
                 >
                   {Object.values(QuoteItemType).map((type) => (
                     <option key={type} value={type}>
-                      {type}
+                      {ITEM_TYPE_LABELS[type]}
                     </option>
                   ))}
                 </select>
               </div>
 
               {/* Description */}
-              <div className="sm:col-span-4 space-y-1">
+              <div className="sm:col-span-3 space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Descripción *</label>
                 <input
                   type="text"
                   required
                   {...register(`items.${index}.description` as const)}
                   placeholder="Ej. Hotel DoubleTree París 4 noches"
-                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2.5 text-xs text-white focus:outline-none placeholder-slate-700"
+                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2.5 text-xs text-slate-100 focus:outline-none placeholder-slate-700"
                 />
               </div>
 
@@ -303,7 +312,7 @@ export default function QuoteBuilderForm({
                   required
                   min="1"
                   {...register(`items.${index}.quantity` as const, { valueAsNumber: true })}
-                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2 text-xs text-white focus:outline-none"
+                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2 text-xs text-slate-100 focus:outline-none"
                 />
               </div>
 
@@ -316,16 +325,16 @@ export default function QuoteBuilderForm({
                   step="0.01"
                   {...register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2 text-xs text-white focus:outline-none"
+                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-2 text-xs text-slate-100 focus:outline-none"
                 />
               </div>
 
               {/* Currency */}
-              <div className="sm:col-span-1 space-y-1">
+              <div className="sm:col-span-2 space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Moneda</label>
                 <select
                   {...register(`items.${index}.currency` as const)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-1 text-xs text-white focus:outline-none"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-2.5 text-xs text-slate-100 focus:outline-none"
                 >
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -334,11 +343,11 @@ export default function QuoteBuilderForm({
               </div>
 
               {/* Provider */}
-              <div className="sm:col-span-1 space-y-1">
+              <div className="sm:col-span-2 space-y-1">
                 <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Proveedor</label>
                 <select
                   {...register(`items.${index}.providerId` as const)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-1 text-xs text-white focus:outline-none"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-2.5 text-xs text-slate-100 focus:outline-none"
                 >
                   <option value="">Ninguno</option>
                   {providers.map((p) => (
@@ -381,7 +390,7 @@ export default function QuoteBuilderForm({
       {/* Itinerary Planner */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
         <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-          <h3 className="font-bold text-base text-white flex items-center gap-2">
+          <h3 className="font-bold text-base text-slate-100 flex items-center gap-2">
             <Calendar className="h-5 w-5 text-emerald-400" />
             <span>Planificador de Itinerario</span>
           </h3>
@@ -433,7 +442,7 @@ export default function QuoteBuilderForm({
                   required
                   {...register(`itinerary.${index}.title` as const)}
                   placeholder="Ej. Llegada a París y traslado"
-                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-3 text-xs text-white focus:outline-none placeholder-slate-700"
+                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-100 focus:outline-none placeholder-slate-700"
                 />
               </div>
 
@@ -445,7 +454,7 @@ export default function QuoteBuilderForm({
                   rows={2}
                   {...register(`itinerary.${index}.description` as const)}
                   placeholder="Detalla las actividades y cronograma de este día de viaje..."
-                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-3 text-xs text-white focus:outline-none placeholder-slate-700 resize-none"
+                  className="w-full bg-slate-900/60 border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-100 focus:outline-none placeholder-slate-700 resize-none"
                 />
               </div>
 
@@ -458,7 +467,7 @@ export default function QuoteBuilderForm({
         <div className="pt-4 flex gap-3 justify-end">
           <Link
             href="/dashboard/quotes"
-            className="bg-slate-800 hover:bg-slate-700 text-white rounded-xl px-4 py-2.5 text-sm font-semibold transition"
+            className="bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-xl px-4 py-2.5 text-sm font-semibold transition"
           >
             Cancelar
           </Link>

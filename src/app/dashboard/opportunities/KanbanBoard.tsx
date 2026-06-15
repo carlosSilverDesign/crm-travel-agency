@@ -185,7 +185,7 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
           </span>
           <span className="text-slate-400">
             Total Proyectado:{' '}
-            <strong className="text-white font-extrabold ml-1">
+            <strong className="text-slate-100 font-extrabold ml-1">
               ${getStageSum(activeTab).toLocaleString()}
             </strong>
           </span>
@@ -206,7 +206,7 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
                 <div className="space-y-1">
                   <div className="flex justify-between items-start">
                     <h4 className="font-bold text-sm text-slate-100">{opp.title}</h4>
-                    <span className="font-bold text-white text-sm">
+                    <span className="font-bold text-slate-100 text-sm">
                       ${opp.estimatedValue.toLocaleString()}
                     </span>
                   </div>
@@ -290,7 +290,7 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
                     className="bg-slate-900 border border-slate-800/80 hover:border-slate-700 p-4 rounded-xl shadow-md space-y-3 cursor-grab active:cursor-grabbing hover:bg-slate-800/30 transition duration-150 relative group"
                   >
                     <div className="space-y-1">
-                      <h5 className="font-bold text-xs text-slate-200 group-hover:text-white truncate">
+                      <h5 className="font-bold text-xs text-slate-200 group-hover:text-slate-100 truncate">
                         {opp.title}
                       </h5>
                       <p className="text-[10px] text-slate-500 font-medium truncate">
@@ -302,13 +302,13 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
                       <span className="bg-slate-850 border border-slate-800 text-slate-400 px-2 py-0.2 rounded-md font-medium uppercase tracking-wider text-[8px]">
                         {opp.client.travelerType}
                       </span>
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-slate-100">
                         ${opp.estimatedValue.toLocaleString()}
                       </span>
                     </div>
 
                     {/* Quick navigation arrows (visible on hover) */}
-                    <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex gap-1 transition duration-150">
+                    <div className="absolute right-3.5 top-3.5 opacity-0 group-hover:opacity-100 flex gap-1 transition duration-150">
                       {stage !== 'PROSPECT' && (
                         <button
                           onClick={() => {
@@ -316,7 +316,7 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
                             const index = stages.indexOf(opp.stage)
                             moveOpportunity(opp.id, stages[index - 1])
                           }}
-                          className="p-1 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-md text-slate-400 hover:text-white"
+                          className="p-1 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-md text-slate-400 hover:text-slate-100"
                           title="Fase anterior"
                         >
                           <ArrowLeft className="h-3 w-3" />
@@ -329,7 +329,7 @@ export default function KanbanBoard({ initialOpportunities }: KanbanBoardProps) 
                             const index = stages.indexOf(opp.stage)
                             moveOpportunity(opp.id, stages[index + 1])
                           }}
-                          className="p-1 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-md text-slate-400 hover:text-white"
+                          className="p-1 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-md text-slate-400 hover:text-slate-100"
                           title="Siguiente fase"
                         >
                           <ArrowRight className="h-3 w-3" />

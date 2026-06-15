@@ -54,11 +54,11 @@ export default function UserFormDialog() {
       <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-scale-in">
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/40 shrink-0">
-          <h3 className="font-bold text-lg text-white flex items-center gap-2">
+          <h3 className="font-bold text-lg text-slate-100 flex items-center gap-2">
             <UserPlus className="h-5 w-5 text-indigo-400" />
             <span>Invitar Asesor / Counter</span>
           </h3>
-          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-white rounded-lg">
+          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-slate-100 rounded-lg">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -78,7 +78,7 @@ export default function UserFormDialog() {
               type="text"
               {...register('name')}
               placeholder="Ej. Sofía Rodríguez"
-              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
             />
             {errors.name && (
               <p className="text-[10px] text-red-400">{errors.name.message}</p>
@@ -94,7 +94,7 @@ export default function UserFormDialog() {
                 type="email"
                 {...register('email')}
                 placeholder="sofia@agencia.com"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
               />
             </div>
             {errors.email && (
@@ -109,7 +109,7 @@ export default function UserFormDialog() {
               <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-500" />
               <select
                 {...register('role')}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition"
               >
                 <option value={Role.AGENT} className="bg-slate-900">Asesor de Ventas (AGENT)</option>
                 <option value={Role.MANAGER} className="bg-slate-900">Gerente Operativo (MANAGER)</option>
@@ -127,7 +127,7 @@ export default function UserFormDialog() {
                 type="password"
                 {...register('password')}
                 placeholder="Mínimo 6 caracteres (ej. Temp123*)"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
               />
             </div>
             {errors.password && (

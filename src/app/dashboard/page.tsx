@@ -61,14 +61,14 @@ export default async function DashboardPage() {
             ¡Hola, Asesor Demo!
           </h1>
           <p className="text-indigo-100 text-xs md:text-sm leading-relaxed">
-            Bienvenido a tu panel de control de Antigravity Travel. Tienes un pipeline activo valorado en{' '}
+            Bienvenido a tu panel de control de Continents Travel. Tienes un pipeline activo valorado en{' '}
             <strong className="text-white font-extrabold">${pipelineValue.toLocaleString()}</strong> y{' '}
             {incidents.length} incidencias en destino requiriendo tu atención.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
               href="/dashboard/opportunities?create=true"
-              className="bg-white hover:bg-slate-100 text-indigo-900 rounded-xl px-4 py-2.5 text-xs font-bold transition shadow-lg flex items-center gap-1.5 cursor-pointer"
+              className="bg-white text-indigo-900 rounded-xl px-4 py-2.5 text-xs font-bold transition shadow-lg flex items-center gap-1.5 cursor-pointer btn-registrar-trato"
             >
               <Plus className="h-4 w-4" />
               <span>Registrar Trato</span>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Pasajeros Totales</p>
-            <p className="text-lg font-black text-white mt-0.5">{totalClients}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{totalClients}</p>
           </div>
         </div>
 
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tratos Activos</p>
-            <p className="text-lg font-black text-white mt-0.5">{activeOpps}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{activeOpps}</p>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Valor de Pipeline</p>
-            <p className="text-lg font-black text-white mt-0.5">${pipelineValue.toLocaleString()}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">${pipelineValue.toLocaleString()}</p>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Alertas Destino</p>
-            <p className="text-lg font-black text-white mt-0.5">{incidents.length}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{incidents.length}</p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
             <div className="space-y-2.5">
               <Link
                 href="/dashboard/opportunities"
-                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 hover:bg-slate-950 border border-slate-850 hover:border-slate-800 transition text-xs"
+                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 hover:bg-slate-950 border border-transparent hover:border-slate-700/50 transition text-xs"
               >
                 <div>
                   <p className="font-bold text-slate-200">Ver Pipeline Kanban</p>
@@ -184,7 +184,7 @@ export default async function DashboardPage() {
 
               <Link
                 href="/dashboard/clients"
-                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 hover:bg-slate-950 border border-slate-850 hover:border-slate-800 transition text-xs"
+                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 hover:bg-slate-950 border border-transparent hover:border-slate-700/50 transition text-xs"
               >
                 <div>
                   <p className="font-bold text-slate-200">Fichas Únicas de Pasajero</p>

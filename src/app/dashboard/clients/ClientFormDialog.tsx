@@ -1,18 +1,26 @@
 'use client'
 
 import { useTransition, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { clientSchema, ClientSchemaType } from '@/lib/validations/clients.schema'
-import { createClientAction } from '@/app/actions/clients.actions'
+import { createClientAction, updateClientAction } from '@/app/actions/clients.actions'
 import { TravelerType } from '@prisma/client'
 import { X, Loader2, Sparkles, User, Mail, Phone, Globe, CreditCard } from 'lucide-react'
 
-export default function ClientFormDialog() {
-  const router = useRouter()
+interface ClientFormDialogProps {
+  client?: any | null
+  onClose: () => void
+  onSuccess: (updatedOrNewClient?: any) => void
+}
+
+export default function ClientFormDialog({ client, onClose, onSuccess }: ClientFormDialogProps) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
+
+  const [tagsInput, setTagsInput] = useState(
+    client && client.tags ? client.tags.join(', ') : ''
+  )
 
   const {
     register,
@@ -21,19 +29,19 @@ export default function ClientFormDialog() {
   } = useForm<ClientSchemaType>({
     resolver: zodResolver(clientSchema) as any,
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      nationality: '',
-      passportNumber: '',
-      passportExpiry: '',
-      birthDate: '',
-      travelerType: TravelerType.SOLO,
-      tags: [],
-      notes: '',
-      documentFiles: [],
-      preferences: {
+      firstName: client ? client.firstName : '',
+      lastName: client ? client.lastName : '',
+      email: client ? client.email : '',
+      phone: client ? client.phone || '' : '',
+      nationality: client ? client.nationality || '' : '',
+      passportNumber: client ? client.passportNumber || '' : '',
+      passportExpiry: client && client.passportExpiry ? new Date(client.passportExpiry).toISOString().split('T')[0] : '',
+      birthDate: client && client.birthDate ? new Date(client.birthDate).toISOString().split('T')[0] : '',
+      travelerType: client ? client.travelerType : TravelerType.SOLO,
+      tags: client ? client.tags : [],
+      notes: client ? client.notes || '' : '',
+      documentFiles: client && client.documentFiles ? (typeof client.documentFiles === 'string' ? JSON.parse(client.documentFiles) : client.documentFiles) : [],
+      preferences: client && client.preferences ? (typeof client.preferences === 'string' ? JSON.parse(client.preferences) : client.preferences) : {
         seatType: 'WINDOW',
         mealType: 'STANDARD',
         hotelChains: [],
@@ -43,16 +51,28 @@ export default function ClientFormDialog() {
   })
 
   const handleClose = () => {
-    router.push('/dashboard/clients')
+    onClose()
   }
 
   const onSubmit = (data: ClientSchemaType) => {
     setError('')
     startTransition(async () => {
-      const res = await createClientAction(data)
+      const tagsArray = tagsInput
+        .split(',')
+        .map((t: string) => t.trim())
+        .filter((t: string) => t.length > 0)
+
+      const finalData = {
+        ...data,
+        tags: tagsArray,
+      }
+
+      const res = client
+        ? await updateClientAction(client.id, finalData)
+        : await createClientAction(finalData)
+
       if (res.success) {
-        router.push('/dashboard/clients')
-        router.refresh()
+        onSuccess(res.data)
       } else {
         setError(res.error || 'Ocurrió un error al guardar el pasajero.')
       }
@@ -68,8 +88,10 @@ export default function ClientFormDialog() {
       <div className="relative w-full max-w-xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-scale-in">
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/40 shrink-0">
-          <h3 className="font-bold text-lg text-white">Registrar Nuevo Pasajero</h3>
-          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-white rounded-lg">
+          <h3 className="font-bold text-lg text-slate-100">
+            {client ? 'Editar Ficha de Pasajero' : 'Registrar Nuevo Pasajero'}
+          </h3>
+          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-slate-100 rounded-lg">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -90,7 +112,7 @@ export default function ClientFormDialog() {
                 type="text"
                 {...register('firstName')}
                 placeholder="Ej. Juan"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
               {errors.firstName && (
                 <p className="text-[10px] text-red-400">{errors.firstName.message}</p>
@@ -103,7 +125,7 @@ export default function ClientFormDialog() {
                 type="text"
                 {...register('lastName')}
                 placeholder="Ej. Pérez"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
               {errors.lastName && (
                 <p className="text-[10px] text-red-400">{errors.lastName.message}</p>
@@ -119,7 +141,7 @@ export default function ClientFormDialog() {
                 type="email"
                 {...register('email')}
                 placeholder="Ej. juan.perez@email.com"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
               {errors.email && (
                 <p className="text-[10px] text-red-400">{errors.email.message}</p>
@@ -132,7 +154,7 @@ export default function ClientFormDialog() {
                 type="text"
                 {...register('phone')}
                 placeholder="Ej. +34 600 000 000"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
             </div>
           </div>
@@ -145,7 +167,7 @@ export default function ClientFormDialog() {
                 type="text"
                 {...register('nationality')}
                 placeholder="Ej. Española"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
             </div>
 
@@ -153,7 +175,7 @@ export default function ClientFormDialog() {
               <label className="text-xs font-semibold text-slate-300 block">Tipo de Viajero</label>
               <select
                 {...register('travelerType')}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
               >
                 {Object.values(TravelerType).map((type) => (
                   <option key={type} value={type} className="bg-slate-900">
@@ -172,7 +194,7 @@ export default function ClientFormDialog() {
                 type="text"
                 {...register('passportNumber')}
                 placeholder="Ej. AA123456"
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
               />
             </div>
 
@@ -181,9 +203,21 @@ export default function ClientFormDialog() {
               <input
                 type="date"
                 {...register('passportExpiry')}
-                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
               />
             </div>
+          </div>
+
+          {/* Etiquetas */}
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-slate-300 block">Etiquetas (separadas por comas)</label>
+            <input
+              type="text"
+              value={tagsInput}
+              onChange={(e) => setTagsInput(e.target.value)}
+              placeholder="Ej. vip, premium, recurrent, business"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+            />
           </div>
 
           {/* Notas */}
@@ -193,7 +227,7 @@ export default function ClientFormDialog() {
               {...register('notes')}
               placeholder="Preferencias de hotel, alergias alimentarias, solicitudes especiales..."
               rows={3}
-              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition resize-none"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition resize-none"
             />
           </div>
 
@@ -202,7 +236,7 @@ export default function ClientFormDialog() {
             <button
               type="button"
               onClick={handleClose}
-              className="bg-slate-800 hover:bg-slate-700 text-white rounded-xl px-4 py-2.5 text-sm font-semibold transition"
+              className="bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-xl px-4 py-2.5 text-sm font-semibold transition"
             >
               Cancelar
             </button>

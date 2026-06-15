@@ -156,11 +156,11 @@ export default async function QuotesPage({ searchParams }: PageProps) {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/quotes"
-            className="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-semibold transition"
+            className="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-semibold transition"
           >
             ← Volver al Listado
           </Link>
-          <h2 className="text-xl font-bold tracking-tight text-white">Diseñar Nueva Cotización</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-100">Diseñar Nueva Cotización</h2>
         </div>
 
         <QuoteBuilderForm
@@ -199,7 +199,7 @@ export default async function QuotesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Propuestas Activas</p>
-            <p className="text-xl font-bold text-white mt-0.5">{activeQuotesCount}</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">{activeQuotesCount}</p>
           </div>
         </div>
 
@@ -209,7 +209,7 @@ export default async function QuotesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Monto Aceptado</p>
-            <p className="text-xl font-bold text-white mt-0.5">${acceptedValue.toLocaleString()}</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">${acceptedValue.toLocaleString()}</p>
           </div>
         </div>
 
@@ -219,7 +219,7 @@ export default async function QuotesPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Tasa de Aceptación</p>
-            <p className="text-xl font-bold text-white mt-0.5">{conversionRate.toFixed(1)}%</p>
+            <p className="text-xl font-bold text-slate-100 mt-0.5">{conversionRate.toFixed(1)}%</p>
           </div>
         </div>
       </div>
@@ -227,7 +227,7 @@ export default async function QuotesPage({ searchParams }: PageProps) {
       {/* Quotes Table/List */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/40">
-          <h3 className="font-bold text-base text-white">Cotizaciones Generadas</h3>
+          <h3 className="font-bold text-base text-slate-100">Cotizaciones Generadas</h3>
         </div>
 
         {quotes.length === 0 ? (

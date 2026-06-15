@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { logoutAction } from '@/app/actions/auth.actions'
@@ -17,6 +17,8 @@ import {
   Bell,
   User as UserIcon,
   Shield,
+  Sun,
+  Moon,
 } from 'lucide-react'
 
 // Defined types for active user
@@ -37,6 +39,25 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+
+  // Synchronize the theme state on mount
+  useEffect(() => {
+    const activeTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+    setTheme(activeTheme)
+  }, [])
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(nextTheme)
+    if (nextTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }
 
   // Dynamically build navItems based on user role
   const navItems = [
@@ -70,15 +91,15 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row md:h-screen md:overflow-hidden">
       {/* Sidebar for Desktop */}
       <aside className="hidden md:flex md:w-64 md:flex-col bg-slate-900 border-r border-slate-800 shrink-0">
         <div className="h-16 flex items-center gap-2 px-6 border-b border-slate-800">
           <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center">
             <Plane className="h-5 w-5 text-white rotate-45" />
           </div>
-          <span className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
-            Antigravity CRM
+          <span className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-slate-100 to-slate-400">
+            Continents CRM
           </span>
         </div>
 
@@ -90,11 +111,10 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-600/15 border border-blue-500/20 text-blue-400'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                  ? 'bg-blue-600/15 border border-blue-500/20 text-blue-400'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+                  }`}
               >
                 <Icon className={`h-5 w-5 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
@@ -116,7 +136,7 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
       </aside>
 
       {/* Header and Mobile Drawer container */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 md:h-full md:overflow-hidden">
         {/* Top Navbar */}
         <header className="h-16 bg-slate-900/60 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-4 md:px-8 shrink-0 sticky top-0 z-30">
           <div className="flex items-center gap-4">
@@ -127,12 +147,25 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
             >
               <Menu className="h-6 w-6" />
             </button>
-            <h2 className="hidden md:block text-xl font-bold tracking-tight text-white capitalize">
+            <h2 className="hidden md:block text-xl font-bold tracking-tight text-slate-100 capitalize">
               {navItems.find((item) => item.href === pathname)?.label || 'CRM Portal'}
             </h2>
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-slate-400 hover:text-slate-200 bg-slate-850/60 border border-slate-800 rounded-xl hover:border-slate-700 transition cursor-pointer"
+              aria-label="Alternar modo de color"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5 text-amber-400 animate-pulse" />
+              ) : (
+                <Moon className="h-5 w-5 text-indigo-600" />
+              )}
+            </button>
+
             {/* Notification Bell */}
             <button
               className="p-2 text-slate-400 hover:text-slate-200 relative bg-slate-800/40 border border-slate-800 rounded-xl hover:border-slate-700 transition"
@@ -144,11 +177,11 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
 
             {/* Profile Dropdown indicator */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
-              <div className="h-8 w-8 rounded-full bg-indigo-600/35 border border-indigo-500/30 flex items-center justify-center text-indigo-300">
-                <UserIcon className="h-4 w-4" />
+              <div className="h-8 w-8 rounded-full bg-indigo-500/10 dark:bg-indigo-600/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                <UserIcon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div className="hidden sm:block text-left">
-                <p className="text-xs font-semibold text-white">{user?.name || 'Asesor Demo'}</p>
+                <p className="text-xs font-semibold text-slate-100">{user?.name || 'Asesor Demo'}</p>
                 <p className="text-[10px] text-slate-400">{getRoleLabel(user?.role)}</p>
               </div>
             </div>
@@ -171,7 +204,7 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
                   <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center">
                     <Plane className="h-4.5 w-4.5 text-white rotate-45" />
                   </div>
-                  <span className="font-bold text-base text-white">Antigravity CRM</span>
+                  <span className="font-bold text-base text-slate-100">Continents CRM</span>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -191,11 +224,10 @@ export default function DashboardLayoutClient({ children, user }: DashboardLayou
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                        isActive
-                          ? 'bg-blue-600/15 border border-blue-500/20 text-blue-400'
-                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive
+                        ? 'bg-blue-600/15 border border-blue-500/20 text-blue-400'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+                        }`}
                     >
                       <Icon className="h-5 w-5" />
                       <span>{item.label}</span>

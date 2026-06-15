@@ -38,7 +38,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
         <div className="h-14 w-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-400 border border-red-500/20 shadow-lg">
           <ShieldAlert className="h-7 w-7" />
         </div>
-        <h2 className="text-xl font-bold text-white">Acceso Denegado</h2>
+        <h2 className="text-xl font-bold text-slate-100">Acceso Denegado</h2>
         <p className="text-sm text-slate-400 max-w-sm">
           No tienes privilegios administrativos para acceder a la gestión de usuarios de la agencia.
         </p>
@@ -89,7 +89,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Equipo</p>
-            <p className="text-lg font-black text-white mt-0.5">{totalUsers}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{totalUsers}</p>
           </div>
         </div>
 
@@ -99,7 +99,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Asesores Activos</p>
-            <p className="text-lg font-black text-white mt-0.5">{activeAgents}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{activeAgents}</p>
           </div>
         </div>
 
@@ -109,7 +109,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Managers Activos</p>
-            <p className="text-lg font-black text-white mt-0.5">{activeManagers}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{activeManagers}</p>
           </div>
         </div>
 
@@ -119,7 +119,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cuentas Inactivas</p>
-            <p className="text-lg font-black text-white mt-0.5">{inactiveUsers}</p>
+            <p className="text-lg font-black text-slate-100 mt-0.5">{inactiveUsers}</p>
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default async function UsersManagementPage({ searchParams }: PageProps) {
       {/* Users List Table */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/40">
-          <h3 className="font-bold text-base text-white">Miembros de la Organización</h3>
+          <h3 className="font-bold text-base text-slate-100">Miembros de la Organización</h3>
         </div>
 
         <div className="overflow-x-auto">

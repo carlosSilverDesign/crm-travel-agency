@@ -72,11 +72,11 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
       <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-scale-in">
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/40 shrink-0">
-          <h3 className="font-bold text-lg text-white flex items-center gap-2">
+          <h3 className="font-bold text-lg text-slate-100 flex items-center gap-2">
             <Target className="h-5 w-5 text-blue-400" />
             <span>Crear Oportunidad de Venta</span>
           </h3>
-          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-white rounded-lg">
+          <button onClick={handleClose} className="p-1.5 text-slate-400 hover:text-slate-100 rounded-lg">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -96,7 +96,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
               type="text"
               {...register('title')}
               placeholder="Ej. Paquete Familia Disney o Aéreos Madrid"
-              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition"
             />
             {errors.title && (
               <p className="text-[10px] text-red-400">{errors.title.message}</p>
@@ -108,7 +108,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
             <label className="text-xs font-semibold text-slate-300 block">Pasajero Relacionado *</label>
             <select
               {...register('clientId')}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
             >
               {clients.map((c) => (
                 <option key={c.id} value={c.id} className="bg-slate-900">
@@ -131,7 +131,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
                   type="number"
                   {...register('estimatedValue', { valueAsNumber: true })}
                   placeholder="0.00"
-                  className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+                  className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
                 />
               </div>
               {errors.estimatedValue && (
@@ -143,7 +143,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
               <label className="text-xs font-semibold text-slate-300 block">Canal de Origen</label>
               <select
                 {...register('source')}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition"
               >
                 {Object.values(OpportunitySource).map((src) => (
                   <option key={src} value={src} className="bg-slate-900">
@@ -161,7 +161,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
               {...register('notes')}
               placeholder="Detalles sobre destinos de interés, vuelos preferidos, aerolíneas o cotizaciones pendientes..."
               rows={3}
-              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition resize-none"
+              className="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-2.5 px-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition resize-none"
             />
           </div>
 
@@ -172,7 +172,7 @@ export default function OpportunityFormDialog({ clients, agentId }: OpportunityF
             <button
               type="button"
               onClick={handleClose}
-              className="bg-slate-800 hover:bg-slate-700 text-white rounded-xl px-4 py-2.5 text-sm font-semibold transition"
+              className="bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-xl px-4 py-2.5 text-sm font-semibold transition"
             >
               Cancelar
             </button>

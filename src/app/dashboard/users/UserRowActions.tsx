@@ -48,7 +48,7 @@ export default function UserRowActions({ userId, currentRole, isActive, isSelf }
         value={currentRole}
         disabled={isPending || isSelf}
         onChange={(e) => handleRoleChange(e.target.value as Role)}
-        className="bg-slate-950 border border-slate-800 rounded-lg py-1 px-2 text-xs text-white focus:outline-none focus:border-indigo-500 disabled:opacity-40"
+        className="bg-slate-950 border border-slate-800 rounded-lg py-1 px-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 disabled:opacity-40"
       >
         <option value={Role.AGENT}>AGENT</option>
         <option value={Role.MANAGER}>MANAGER</option>
